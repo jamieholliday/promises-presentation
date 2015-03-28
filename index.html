@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>Vaimo Presentation</title>
+
+		<meta name="description" content="Javascript promises presentation">
+		<meta name="author" content="Jamie Holliday">
+
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="css/reveal.css">
+		<link rel="stylesheet" href="css/theme/vaimo.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? 'css/print/pdf.css' : 'css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+
+		<!--[if lt IE 9]>
+		<script src="lib/js/html5shiv.js"></script>
+		<![endif]-->
+	</head>
+
+	<body>
+
+		<div class="reveal">
+
+			<!-- Any section element inside of this container is displayed as a slide -->
+			<div class="slides">
+
+				<section data-background="#3299b5">
+					<img class="logo" src="img/logo.png" alt="logo">
+				</section>
+				
+				<section class="title-dark" data-background="#3299b5">
+					<h1>Javascript Promises</h1>
+					<h2>London Lessons</h2>
+				</section>
+
+				<section class="headline">
+					<h1>Jamie Holliday</h1>
+					<h2>FE Developer - London</h2>
+					<a href="mailto:jamie.holliday@vaimo.com">jamie.holliday@vaimo.com</a>
+				</section>
+
+				<section class="headline">
+						<h1>WTF is a promise</h1>
+					<div class="fragment" data-fragment-index="1">
+						<p>A promise represents the result of an asynchronous operation</p>
+					</div>
+					<div class="centre fragment" data-fragment-index="2">
+						<iframe src="//giphy.com/embed/131euX3fv2Oag8?html5=true" width="860" height="436" frameBorder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+					</div>
+				</section>
+
+				<section class="headline">
+					<h1>What does that mean then?</h1>
+					<ul>
+						<li>Used in Async code to replace where we’d normally use a callback
+</li>
+						<li>Easier to read / reason about</li>
+						<li>Other cool features</li>
+					</ul>
+				</section>
+
+				<section class="headline">
+					<h1>Standard callback</h1>
+					<pre><code data-trim>
+function onButtonClick () {
+    doSomethingAsync('1', function(data) {
+        if(data.success) {
+            log(data.msg);
+        } else if(data.error) {
+            log('Ah crap something broke');
+        }
+    });
+}
+
+function doSomethingAsync(txt, cb) {
+  var msg = 'Thing ' + txt + ' happened'
+	  setTimeout(function() {
+      cb({success: true, msg: msg});
+    	}, 1000);
+}
+					</code></pre>
+				</section>
+
+				<section class="headline">
+					<h1>Standard callback</h1>
+					<h3>Demo</h3>
+					<p data-height="400" data-theme-id="12383" data-slug-hash="VYQRXx" data-default-tab="result" data-user="jamieholliday" class='codepen'>See the Pen <a href='http://codepen.io/jamieholliday/pen/VYQRXx/'>Basic callback example</a> by Jamie Holliday (<a href='http://codepen.io/jamieholliday'>@jamieholliday</a>) on <a href='http://codepen.io'>CodePen</a>.</p>
+<script async src="//assets.codepen.io/assets/embed/ei.js"></script>
+				</section>
+
+				<section class="headline">
+					<h1>Promise equivalent</h1>
+					<h3>Demo</h3>
+					<pre><code data-trim contenteditable>
+function onButtonClick () {
+    doSomethingAsync('1')
+    .then(function(data) {
+        log(data);
+    }, function(data) {
+        log(data);
+    });
+}
+
+function doSomethingAsync(txt) {
+    return new Promise(function(resolve, reject) {
+        setTimeout(function() {
+            resolve('Thing ' + txt + ' happened');
+        }, 1000);
+    });
+}
+					</code></pre>
+				</section>
+
+				<section class="headline">
+					<h1>Promise equivalent</h1>
+					<p data-height="400" data-theme-id="12383" data-slug-hash="Jopzvr" data-default-tab="result" data-user="jamieholliday" class='codepen'>See the Pen <a href='http://codepen.io/jamieholliday/pen/Jopzvr/'>Basic promise example</a> by Jamie Holliday (<a href='http://codepen.io/jamieholliday'>@jamieholliday</a>) on <a href='http://codepen.io'>CodePen</a>.</p>
+<script async src="//assets.codepen.io/assets/embed/ei.js"></script>
+				</section>
+
+				<section class="headline">
+					<h1>What about 2 Async operations?</h1>
+					<pre><code data-trim>
+function onButtonClick () {
+    doSomethingAsync('1', function(data) {
+        if(data.success) {
+            log(data.msg);
+          	doSomethingAsync('2', function(data) {
+            	if(data.success) {
+	            	log(data.msg); 
+                } else if(data.error) {
+                    log('Ah crap something broke');
+                }
+            });
+        } else if(data.error) {
+            log('Ah crap something broke');
+        }
+    });
+}
+
+function doSomethingAsync(txt, cb) {
+  var msg = 'Thing ' + txt + ' happened'
+	  setTimeout(function() {
+      cb({success: true, msg: msg});
+    	}, 1000);
+}
+					</code></pre>
+				</section>
+
+				<section class="headline">
+					<h1>What about 2 Async operations?</h1>
+					<h3>Demo</h3>
+					<p data-height="400" data-theme-id="12383" data-slug-hash="GgQePz" data-default-tab="result" data-user="jamieholliday" class='codepen'>See the Pen <a href='http://codepen.io/jamieholliday/pen/GgQePz/'>2 Step Callback</a> by Jamie Holliday (<a href='http://codepen.io/jamieholliday'>@jamieholliday</a>) on <a href='http://codepen.io'>CodePen</a>.</p>
+<script async src="//assets.codepen.io/assets/embed/ei.js"></script>
+				</section>
+
+				<section class="headline">
+					<h1>2 Async operations - Promises?</h1>
+					<pre><code data-trim>
+function onButtonClick () {
+    doSomethingAsync('1')
+    .then(function(data) {
+        log(data);
+        return doSomethingAsync('2');
+    })
+    .then(function(data) {
+        log(data);
+    })
+    .catch(function(data) {
+        log('Ah crap something broke');
+    });
+}
+
+function doSomethingAsync(txt) {
+    return new Promise(function(resolve, reject) {
+        setTimeout(function() {
+            resolve('Thing ' + txt + ' happened');
+        }, 1000);
+    });
+}
+					</code></pre>
+				</section>
+				<section class="headline">
+					<h1>2 Async operations - Promises</h1>
+					<h3>Demo</h3>
+					<p data-height="400" data-theme-id="12383" data-slug-hash="VYQRqB" data-default-tab="result" data-user="jamieholliday" class='codepen'>See the Pen <a href='http://codepen.io/jamieholliday/pen/VYQRqB/'>2 Async Promises</a> by Jamie Holliday (<a href='http://codepen.io/jamieholliday'>@jamieholliday</a>) on <a href='http://codepen.io'>CodePen</a>.</p>
+<script async src="//assets.codepen.io/assets/embed/ei.js"></script>
+				</section>
+
+				<section class="headline">
+					<h1>Wait until all have completed</h1>
+					<pre><code data-trim>
+function onButtonClick () {
+    var arrayOfThingsToFetch = ['1', '2', '3', '4', '5'];
+    var arrayOfPromises = arrayOfThingsToFetch.map(doSomethingAsync);
+    Promise.all(arrayOfPromises)
+        .then(function(arrayOfResults) {
+          arrayOfResults.forEach(function(result) {
+              log(result);
+          })
+    })
+}
+
+function doSomethingAsync(txt) {
+    return new Promise(function(resolve, reject) {
+            setTimeout(function() {
+                resolve('Thing' + txt + 'happened');
+            }, 1000);
+    });
+}
+					</code></pre>
+				</section>
+
+				<section class="headline">
+					<h1>Wait until all have completed</h1>
+					<h3>Demo</h3>
+					<p data-height="400" data-theme-id="12383" data-slug-hash="dPdLPg" data-default-tab="result" data-user="jamieholliday" class='codepen'>See the Pen <a href='http://codepen.io/jamieholliday/pen/dPdLPg/'>Promise.all</a> by Jamie Holliday (<a href='http://codepen.io/jamieholliday'>@jamieholliday</a>) on <a href='http://codepen.io'>CodePen</a>.</p>
+		<script async src="//assets.codepen.io/assets/embed/ei.js"></script>
+				</section>
+				<section class="headline">
+					<h1>How can I use them?</h1>
+					<ul>
+						<li>Promises are in native JavaScript ES6</li>
+						<li>Available in most modern browsers now  (appart from ie obvs! - polyfillable)</li>
+					</ul>
+					<img src="img/can-i-use.jpg" alt="">
+				</section>
+
+				<section class="headline">
+					<h1>Common Libraries</h1>
+					<h3>Promises/A+</h3>
+					<ul>
+						<li>Q</li>
+						<li>when</li>
+						<li>WinJS</li>
+						<li>RSVP.js</li>
+					</ul>
+					<p>jQuery Deferreds not Promise/A+ compliant</p>
+				</section>
+				<section class="headline">
+					<h1>Should we be using these then?</h1>
+					<div class="centre fragment">
+						<iframe src="//giphy.com/embed/1283npzvlMuZ5C?html5=true" width="480" height="454" frameBorder="0" webkitAllowFullScreen mozallowfullscreen allowFullScreen></iframe>
+					</div>
+					
+				</section>
+				<section class="sub-dark" data-background="#3299b5">
+					<h1>Questions?</h1>
+				</section>
+				<section class="sub-dark" data-background="#3299b5">
+					<p>Thanks, Tack, Gracias, Mulțumiri, Tänan, Köszönet, Cпасибі, Merci, Danke Shon </p>
+				</section>
+			</div>
+
+		</div>
+
+		<script src="lib/js/head.min.js"></script>
+		<script src="js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: true,
+				progress: true,
+				history: true,
+				center: true,
+
+				transition: 'fade', // none/fade/slide/convex/concave/zoom
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: 'plugin/highlight/highlight.js', async: true, condition: function() { return !!document.querySelector( 'pre code' ); }, callback: function() { hljs.initHighlightingOnLoad(); } },
+					{ src: 'plugin/zoom-js/zoom.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>

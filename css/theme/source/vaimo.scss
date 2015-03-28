@@ -1,0 +1,131 @@
+/**
+ * White theme for reveal.js. This is the opposite of the 'black' theme.
+ *
+ * Copyright (C) 2015 Hakim El Hattab, http://hakim.se
+ */
+
+
+// Default mixins and settings -----------------
+@import "../template/mixins";
+@import "../template/settings";
+// ---------------------------------------------
+
+
+// Include theme-specific fonts
+@import url(../../lib/font/open-sans/open-sans.css);
+@import url(../../lib/font/droid-serif/droid-serif.css);
+
+
+// Override theme settings (see ../template/settings.scss)
+$backgroundColor: #e1eaec;
+$backgroundColorDark: #3299b5;
+$bulletColor: #b3b8b9;
+
+$mainColor: #003e54;
+$headingColor: #3299b5;
+
+$mainFontSize: 34px;
+$mainFont: 'Droid Serif', serif;
+$headingFont: 'Open Sans', Helvetica, sans-serif;
+$headingTextShadow: none;
+$headingLetterSpacing: normal;
+$headingTextTransform: uppercase;
+$headingFontWeight: 600;
+$linkColor: #00809f;
+$linkColorHover: #333;
+$selectionBackgroundColor: lighten( $linkColor, 25% );
+
+$heading1Size: 2em;
+$heading2Size: 1.2em;
+$heading3Size: 1.1em;
+$heading4Size: 1.0em;
+
+// Theme template ------------------------------
+@import "../template/theme";
+// ---------------------------------------------
+
+
+section {
+
+	&.has-dark-background,
+	&.title-dark,
+	&.sub-dark {
+		&, h1, h2, h3, h4, h5, h6 {
+			color: #fff;
+		}
+	}
+
+	&.title, 
+	&.title-dark,
+	&.sub,
+	&.sub-dark,
+	&.headline {
+		&, h2, h3, h4, h5, h6 {
+			font-family: $mainFont;
+			text-transform: none;
+		}
+	}
+
+	&.title,
+	&.sub,
+	&.headline {
+		&, h2, h3, h4, h5, h6 {
+			color: $mainColor;
+		}
+	}
+
+	&.sub-dark,
+	&.sub-light,
+	&.headline {
+		&, h1, h2, h3, h4, h5, h6 {
+			text-align: left;
+		}
+	}
+
+	li {
+		list-style: none;
+
+		&:before {
+			content:'\2022';
+			display: block;
+			position: relative;
+			max-width: 0px;
+			max-height: 0px;
+			left: -0.8em;
+			top: 0;
+			color: $bulletColor;
+		}
+	}
+
+	.centre {
+		text-align: center;
+	}
+
+}
+
+.reveal {
+	section {
+		img.logo {
+			background: none;
+			box-shadow: none;
+			border: none;
+		}
+
+		img {
+			border-color: $linkColor;
+			margin: 30px 0
+		}
+
+		a {
+			text-decoration: underline;
+		}
+
+	}
+
+	pre {
+			margin-left: 0;
+			& code {
+				padding: 10px;
+			}
+		}
+}
